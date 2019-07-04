@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 
+from SinteticPixels from BinaryOperations as bo
 
 def resizeImgforPixelPerfectGray(img, zoom):
 	control_zoom = zoom
@@ -27,7 +28,7 @@ def growWithBorders(img, growVector):
 	return newImg
 
 def genInnerBorder(img, border_size):
-	img_horizon = getBorderPixels(img)
-	img_wided = widenPixels(img_horizon, getCircleBrushUnpair(border_size)) 
-	img_masked = applyPixelsMask(img_wided, img)
+	img_horizon = bo.getBorderPixels(img)
+	img_wided = bo.widenPixels(img_horizon, getCircleBrushUnpair(border_size)) 
+	img_masked = bo.applyPixelsMask(img_wided, img)
 	return img_masked

@@ -1,6 +1,7 @@
 import numpy as np
 from SinteticPixels import Utils as utils
 
+#It has a decents perfonmace.
 def randomVectorField(dimensions):
 	return (np.random.rand(dimensions[0], dimensions[1], 2) -.5) * 5 
 
