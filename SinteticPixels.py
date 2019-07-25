@@ -1,6 +1,13 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from SinteticPixels import VectorFields as vf
+from SinteticPixels import Show
+from SinteticPixels import GrayGeneration
+from SinteticPixels import GenerationBinary
+from SinteticPixels import GrayOperations
 
-#looks very usable
+img = cv2.imread("img/binary/SD6.png", cv2.IMREAD_GRAYSCALE)
+
+Show.plotImg(img)
+Show.plotImg(GrayOperations.kernelLinearOperation(img, 7))
+

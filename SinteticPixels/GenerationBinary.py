@@ -37,3 +37,42 @@ def perlinNoiseGen(image_size, layersDimensions):
 		rm = np.random.rand(y, x)
 		finalImg += cv2.resize(rm, (image_size[1], image_size[0]), interpolation = cv2.INTER_CUBIC)*i[1]
 	return finalImg
+
+def linearKernelGen(n, case="horizontal"):
+	kernel = 0
+	if case == "horizontal":
+		kernel_size = n
+
+		if n % 2 == 0:
+			kernel_size += 1
+			print("Warring: pairs numbers is not accepted in horizontal")
+
+		kernel = np.zeros((kernel_size, kernel_size))
+		for x in range(kernel_size):
+			kernel[int((n/2)),x] = 1
+			
+	elif case == "vertical":
+		kernel_size = n
+
+		if n % 2 == 0:
+			kernel_size += 1
+			print("Warring: pairs numbers is not accepted in vertical")
+
+		kernel = np.zeros((kernel_size, kernel_size))
+		for y in range(kernel_size):
+			kernel[y,int((n/2))] = 1
+	elif case == "diagonal-down":
+		
+		kernel = np.zeros((n,n))
+		
+		for x in range(n):
+			kernel[x, x] = 1
+
+	elif case == "diagonal-up":
+		kernel = np.zeros((n,n))
+		
+		for x in range(n):
+			kernel[x, (n-1)-x] = 1
+	else: 
+		kernel = np.zeros((n,n))
+	return kernel

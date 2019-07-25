@@ -50,3 +50,4 @@ def applyPixelsMask(img, imgmask):
 	heigth, width = img.shape
 	newImg = cv2.bitwise_and(img, img, mask = imgmask)
 	return newImg
+

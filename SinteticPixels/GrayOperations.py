@@ -1,6 +1,8 @@
 import numpy as np
 import cv2 
-from SinteticPixels from BinaryOperations as bo
+from SinteticPixels import BinaryOperations as bo
+from SinteticPixels import GenerationBinary as genbin
+from SinteticPixels import GrayGeneration as gengray
 
 def resizeImgforPixelPerfectGray(img, zoom):
 	control_zoom = zoom
@@ -32,3 +34,14 @@ def genInnerBorder(img, border_size):
 	img_wided = bo.widenPixels(img_horizon, getCircleBrushUnpair(border_size)) 
 	img_masked = bo.applyPixelsMask(img_wided, img)
 	return img_masked
+
+#noth, south, east, etc and diagonal directions for convolucionalOperation
+def kernelLinearOperation(img, n, direction="diagonal-down"):
+	newimg = np.zeros(img.shape)
+
+	kernel = (gengray.genGaussianKernel(n) / n**2) *3
+
+	newimg = cv2.filter2D(img, -1, kernel)
+
+	return newimg
+	
