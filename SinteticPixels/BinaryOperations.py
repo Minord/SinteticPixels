@@ -51,3 +51,41 @@ def applyPixelsMask(img, imgmask):
 	newImg = cv2.bitwise_and(img, img, mask = imgmask)
 	return newImg
 
+def union(img1, img2, *argv):
+	newimg = cv2.bitwise_or(img1, img2)
+	for img in argv:
+		newimg = cv2.bitwise_or(newimg, img)
+	return newimg
+
+def interception(img1, img2, *argv):
+	newimg = cv2.bitwise_and(img1, img2)
+	for img in argv:
+		newimg = cv2.bitwise_and(newimg, img)
+	return newimg
+
+def negative():
+	pass #TODO: interception images fuctions
+
+def diference():
+	pass #TODO: interception images fuctions
+
+def RGB2binary_img(img, img_type='gray-scale', lowerColor = (255,255,255), upperColor = (255,255,255)):
+	if(img_type == 'gray-scale'):
+		lowerColorGray = 255
+		upperColorGray = 255
+		if type(lowerColor) is int:
+			lowerColorGray = lowerColor
+		if type(upperColor) is int:
+			upperColorGray = upperColor
+		newimg = cv2.inRange(img, lowerColorGray, upperColorGray)
+		return newimg
+		
+	elif(img_type =='rgb'):
+		newimg = cv2.inRange(img, lowerColor[::-1], upperColor[::-1])
+		return newimg
+	elif(img_type =='bgr'):
+		newimg = cv2.inRange(img, lowerColor, upperColor)
+		return newimg
+	print("Error: img_type not accepted")
+	return None
+	

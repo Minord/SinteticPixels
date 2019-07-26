@@ -15,4 +15,5 @@ def genGaussianKernel(n):
 			xc = convFactor * x - 1
 			yc = convFactor * y - 1
 			kernel_array[y,x] = mf.bidimencionalGaussian(xc, yc, 0, 0, .5,.5,1)
-	return kernel_array
+
+	return kernel_array / np.sum(kernel_array)

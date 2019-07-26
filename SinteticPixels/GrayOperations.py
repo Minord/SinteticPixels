@@ -35,7 +35,7 @@ def genInnerBorder(img, border_size):
 	img_masked = bo.applyPixelsMask(img_wided, img)
 	return img_masked
 
-#noth, south, east, etc and diagonal directions for convolucionalOperation
+#noth, south, east, etc and diagonal directions - this not work
 def kernelLinearOperation(img, n, direction="diagonal-down"):
 	newimg = np.zeros(img.shape)
 
@@ -44,4 +44,9 @@ def kernelLinearOperation(img, n, direction="diagonal-down"):
 	newimg = cv2.filter2D(img, -1, kernel)
 
 	return newimg
-	
+
+def kernelGaussianOperation(img, kernel_size):
+	kernel = (gengray.genGaussianKernel(kernel_size))
+	newImg = cv2.filter2D(img, -1, kernel) #apply a convolutional operation
+	return newImg
+
