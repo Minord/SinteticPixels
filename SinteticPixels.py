@@ -14,13 +14,16 @@ biimage = BinaryOperations.RGB2binary_img(img)
 #Outline
 outlineImg = BinaryOperations.getBorderPixels(biimage)
 #Gaussian
-gausianImg = GrayOperations.kernelGaussianOperation(biimage, 7)
+gausianImg = GrayOperations.kernelGaussianOperation(biimage, 10)
 #RandomSelected - for the momment i made somsing totaly random.
-randSelectedPixels = BinaryOperations.randomSelectedPixels(outlineImg, probability=0.35)
+randSelectedPixels = BinaryOperations.randomSelectedPixels(outlineImg, probability=0.35) #probability=0.35
 #Now is the turn of the special fuction what
-#where is the ideal 
+#where is the ideal set it fuction maybe in bynary Operations.
+growPoints = BinaryOperations.followingGausianGradient(randSelectedPixels, gausianImg)
 
-renderImg = GrayOperations.resizeImgforPixelPerfectGray(randSelectedPixels, 5)
+
+
+renderImg = GrayOperations.resizeImgforPixelPerfectGray(growPoints, 5)
 cv2.imshow("image", renderImg)
 cv2.waitKey(0)
 

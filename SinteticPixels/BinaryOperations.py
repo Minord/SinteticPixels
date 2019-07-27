@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import random
+from SinteticPixels import Utils as utils
 
 def widenPixels(img, brush):
 
@@ -47,18 +48,18 @@ def	getBorderPixels(img):
 						continue
 	return newImg
 
-def applyPixelsMask(img, imgmask):
+def applyPixelsMask(img, imgmask):#probability not work
 	heigth, width = img.shape
 	newImg = cv2.bitwise_and(img, img, mask = imgmask)
 	return newImg
 
-def union(img1, img2, *argv):
+def union(img1, img2, *argv):#probability not work
 	newimg = cv2.bitwise_or(img1, img2)
 	for img in argv:
 		newimg = cv2.bitwise_or(newimg, img)
 	return newimg
 
-def interception(img1, img2, *argv):
+def interception(img1, img2, *argv): #probability not work
 	newimg = cv2.bitwise_and(img1, img2)
 	for img in argv:
 		newimg = cv2.bitwise_and(newimg, img)
@@ -105,3 +106,38 @@ def randomSelectedPixels(img, probability = 0.5):
 			if img[y, x] != 0:
 				newimg[y, x] = randFuc(probability)
 	return newimg
+
+	#not work so good but it is enoung to start
+def followingGausianGradient(pointsimg, gaussianimg, length = 5): 
+	newimg = np.zeros(pointsimg.shape)
+	heigth, width = pointsimg.shape
+
+	for x in range(width):
+		for y in range(heigth):
+			if pointsimg[y, x] != 0:
+				#if we are in this point we start a path
+				newx = x
+				newy = y
+				for l in range(length):
+					newimg[newy, newx] = 255
+					#in this point i have to chek the minor value araund
+					found = False
+					newDirection = np.array([0,0])
+					minorValue = gaussianimg[newy, newx]
+
+					for subx in range(-1,2):
+						for suby in range(-1,2):
+							if not (subx == 0 and suby == 0):
+								if utils.isLegalArrayIndex((y + suby, x + subx), gaussianimg.shape):
+									if gaussianimg[y + suby, x + subx] < minorValue:
+										minorValue = gaussianimg[y + suby, x + subx]
+										newDirection = np.array([suby, subx])
+										found = True
+								
+					if found:
+						newx += newDirection[1]
+						newy += newDirection[0]
+					else:
+						break
+	return newimg
+					
