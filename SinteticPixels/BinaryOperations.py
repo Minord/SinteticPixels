@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import random
 
 def widenPixels(img, brush):
 
@@ -88,4 +89,19 @@ def RGB2binary_img(img, img_type='gray-scale', lowerColor = (255,255,255), upper
 		return newimg
 	print("Error: img_type not accepted")
 	return None
-	
+
+def randomSelectedPixels(img, probability = 0.5):
+	newimg = np.zeros(img.shape)
+	heigth, width = img.shape
+
+	def randFuc(probability):
+		if random.random() > probability:
+			return 0
+		else:
+			return 255
+
+	for x in range(width):
+		for y in range(heigth):
+			if img[y, x] != 0:
+				newimg[y, x] = randFuc(probability)
+	return newimg

@@ -15,11 +15,12 @@ biimage = BinaryOperations.RGB2binary_img(img)
 outlineImg = BinaryOperations.getBorderPixels(biimage)
 #Gaussian
 gausianImg = GrayOperations.kernelGaussianOperation(biimage, 7)
+#RandomSelected - for the momment i made somsing totaly random.
+randSelectedPixels = BinaryOperations.randomSelectedPixels(outlineImg, probability=0.35)
+#Now is the turn of the special fuction what
+#where is the ideal 
 
-renderImg = GrayOperations.resizeImgforPixelPerfectGray(gausianImg, 5)
-cv2.imshow("image", renderImg)
-cv2.waitKey(0)
-renderImg = GrayOperations.resizeImgforPixelPerfectGray(biimage, 5)
+renderImg = GrayOperations.resizeImgforPixelPerfectGray(randSelectedPixels, 5)
 cv2.imshow("image", renderImg)
 cv2.waitKey(0)
 

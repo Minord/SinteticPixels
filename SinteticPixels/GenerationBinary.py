@@ -20,7 +20,7 @@ def getCircleBrushUnpair(radio):
 				brush[i,j]=1;
 			else:
 				brush[i,j]=0;
-	return brush
+	return brush / np.sum(brush)
 
 def perlinNoiseGen(image_size, layersDimensions):
 	finalImg = np.zeros(image_size)
