@@ -14,13 +14,13 @@ def widenPixels(img, brush):
 
 	for i in range(0, width):
 		for j in range(0, heigth):
-			if img[j,i] == 1:
+			if img[j,i] == 255:
 				#Stampar patron -parece que sera complicado
 				for k in range(-PivotVec[1],PivotVec[1] + 1):
 					for n in range(-PivotVec[0],PivotVec[0] + 1):
 						if i + k >= 0 and i + k < width and j + n >= 0 and j + n < heigth:
-							if  brush[n+PivotVec[0], k+PivotVec[1]] == 1:
-								newImg[j+n,i+k] = 1 #work only solve it
+							if  brush[n+PivotVec[0], k+PivotVec[1]] == 255:
+								newImg[j+n,i+k] = 255 #work only solve it
 	return newImg
 
 def	getBorderPixels(img):
@@ -53,10 +53,10 @@ def applyPixelsMask(img, imgmask):#probability not work
 	newImg = cv2.bitwise_and(img, img, mask = imgmask)
 	return newImg
 
-def union(img1, img2, *argv):#probability not work
-	newimg = cv2.bitwise_or(img1, img2)
+def union(img1, img2, *argv):
+	newimg = img1 + img2
 	for img in argv:
-		newimg = cv2.bitwise_or(newimg, img)
+		newimg = newimg + img
 	return newimg
 
 def interception(img1, img2, *argv): #probability not work
@@ -108,7 +108,7 @@ def randomSelectedPixels(img, probability = 0.5):
 	return newimg
 
 	#not work so good but it is enoung to start
-def followingGausianGradient(pointsimg, gaussianimg, length = 5): 
+def followingGausianGradient(pointsimg, gaussianimg, length = 2): 
 	newimg = np.zeros(pointsimg.shape)
 	heigth, width = pointsimg.shape
 
@@ -128,12 +128,11 @@ def followingGausianGradient(pointsimg, gaussianimg, length = 5):
 					for subx in range(-1,2):
 						for suby in range(-1,2):
 							if not (subx == 0 and suby == 0):
-								if utils.isLegalArrayIndex((y + suby, x + subx), gaussianimg.shape):
-									if gaussianimg[y + suby, x + subx] < minorValue:
-										minorValue = gaussianimg[y + suby, x + subx]
+								if utils.isLegalArrayIndex((newy + suby, newx + subx), gaussianimg.shape):
+									if gaussianimg[newy + suby, newx + subx] < minorValue:
+										minorValue = gaussianimg[newy + suby, newx + subx]
 										newDirection = np.array([suby, subx])
 										found = True
-								
 					if found:
 						newx += newDirection[1]
 						newy += newDirection[0]

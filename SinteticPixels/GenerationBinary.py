@@ -1,5 +1,8 @@
 import numpy as np
 import cv2
+from SinteticPixels import GrayOperations
+from SinteticPixels import BinaryOperations
+
 
 def getCircleBrushUnpair(radio):
 	radioControl = radio
@@ -76,3 +79,21 @@ def linearKernelGen(n, case="horizontal"):
 	else: 
 		kernel = np.zeros((n,n))
 	return kernel
+
+#Firt version of leaf generation
+def LeafShapes(img):
+	#convert the image to a binary image.
+	biimage = BinaryOperations.RGB2binary_img(img)
+	#get the outlines of the shapes
+	outlineImg = BinaryOperations.getBorderPixels(biimage)
+	#get the gaussian of the shapes
+	gausianImg = GrayOperations.kernelGaussianOperation(biimage, 9) 
+	#Select random pixels from outline 
+	randSelectedPixels = BinaryOperations.randomSelectedPixels(outlineImg, probability=0.4) #probability=0.35
+	#This grow the white pixels folowing to gaussian gradient
+	growPoints = BinaryOperations.followingGausianGradient(randSelectedPixels, gausianImg)
+	#This set a 2*2 brushes over all white pixels
+	growPath = BinaryOperations.widenPixels(growPoints, np.array([[255,255,0],[255,255,0],[0,0,0]]))
+	#Union of primary image and the leafs
+	finalResult = BinaryOperations.union(biimage, growPath)
+	return finalResult
