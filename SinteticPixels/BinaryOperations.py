@@ -73,7 +73,7 @@ def diference():
 
 def RGB2binary_img(img, img_type='gray-scale', lowerColor = (255,255,255), upperColor = (255,255,255)):
 	if(img_type == 'gray-scale'):
-		lowerColorGray = 255
+		lowerColorGray = 1
 		upperColorGray = 255
 		if type(lowerColor) is int:
 			lowerColorGray = lowerColor
