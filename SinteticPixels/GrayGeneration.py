@@ -1,4 +1,5 @@
 import numpy as np
+
 from SinteticPixels import MathFuctions as mf
 
 def genGaussianKernel(n):

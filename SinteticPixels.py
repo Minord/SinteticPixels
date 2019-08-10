@@ -1,34 +1,34 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+
 from SinteticPixels import Show
 from SinteticPixels import GrayGeneration
 from SinteticPixels import GenerationBinary
 from SinteticPixels import GrayOperations
 from SinteticPixels import BinaryOperations
 from SinteticPixels import LoadImg
+from SinteticPixels import RGBOperations
+from tests import test
 
+test.test_all()
 
-img = cv2.imread("img/amins/Tree/BackLeafs.png", cv2.IMREAD_GRAYSCALE)
-
+img = cv2.imread("img/amins/Tree/TopLeafs.png", cv2.IMREAD_GRAYSCALE)
 frames = LoadImg.cutSpriteSheet(img, 200, 200)
 
-#leafting
 leafting_frames = []
-for frame in frames:
-	leafting_frames.append(GenerationBinary.LeafShapes(frame))
+for frame in range(2):
+	leafting_frames.append(GenerationBinary.LeafShapes(frames[frame]))
 	print("frame done")
 
-resized_frames = []
-#resized
-for frame in leafting_frames:
-	resized_frames.append(GrayOperations.resizeImgforPixelPerfectGray(frame, 2))
+print(leafting_frames[0].shape)
+img1 = RGBOperations.gray_to_rgb(leafting_frames[0])
+#img2 = cv2.cvtColor(leafting_frames[1],cv2.COLOR_GRAY2RGB)
 
-f = 0
-while True:
-	cv2.imshow("image", resized_frames[f])
-	f += 1
-	if f >= len(resized_frames):
-		f = 0
-	if cv2.waitKey(100) & 0xFF == ord('q'):
-		break
+img1 = RGBOperations.replace_color(img1, original_color=(255,255,255), new_color=(75,105,46))
+
+Show.plotImg(img1)
+cv2.imshow("i", img1)
+cv2.waitKey(2000)
+cv2.destroyAllWindows()
+

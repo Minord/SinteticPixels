@@ -1,10 +1,12 @@
+import random
+
 import numpy as np
 import cv2
-import random
+
 from SinteticPixels import Utils as utils
 
 def widenPixels(img, brush):
-
+	"""Do widen white pixels and return a new image"""
 	heigth, width = img.shape
 	newImg = np.zeros((heigth, width))
 	brush_heigth, brush_width = brush.shape
