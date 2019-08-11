@@ -1,13 +1,13 @@
 import numpy as np
+import pdb
 
 class img:
 
 	def __init__(self, img_data = None, img_type = None, channels_type = None, indexed_colors = None):
-
 		self.img_data = img_data
 
 		#handle img type image
-		if img_data == None:
+		if img_data is None: 
 			self.img_data = np.zeros((16,16)) #create a emply image in case lack of data
 
 		#get the np array shape
@@ -16,32 +16,37 @@ class img:
 		self.num_channels = 1
 		#if the img_data has more than 1 channel
 		if len(img_shape) > 2:
-			self.num_channels[2] = 1
+			self.num_channels = img_shape[2]
 
 		#resolve the type of the image
 		self.channels_type = channels_type
-		if channels_type == None:
-			if self.img_data.dtype is np.int32:
+		if channels_type is None:
+			if self.img_data.dtype == 'int32':
 				self.channels_type = "int"
-			elif self.img_data.dtype is np.float64:
+			elif self.img_data.dtype == 'float':
 				self.channels_type = "float"
-			elif self.img_data.dtype is np.bool:
+			elif self.img_data.dtype == 'bool':
 				self.channels_type = "bool"
 		#inizializete img_type
 		self.img_type = img_type
 		#infering img type.
-		if img_type == None:
+		if img_type is None:
 
 			if self.num_channels == 1:
-				#clasify it like a gray-scale image or binary. 
-				#self.img_type = "gray-scale"
-				#0-1 float or 0 - 255 int
+				#is bool type
 				if self.channels_type == "bool":
 					self.img_type = "binary"
-				elif indexed_colors != None:
+				#if we have indexed_colors parameter defined set it like indexed image
+				elif indexed_colors is not None:
 					self.img_type = "indexed"
-
-					#TODO: implement the indexed save information
+					
+					#check the ndarray type is correct
+					if self.channels_type == 'int':
+						self.indexed_colors = indexed_colors
+					else:
+						#error: if we dont have de correct ndarray for indexed
+						assert self.channels_type != 'int', 'channels_type needs to be int type ndarray, for indexed_colors'
+				#if the data type is int or float the image is in gray-scale 
 				elif self.channels_type == "int" or self.channels_type == "float":
 					self.img_type = "gray-scale"
 				else:
@@ -75,7 +80,7 @@ class img:
 				if bool
 					 convert bool to gray
 				elif idexed.
-					indexed to rgb - to gray-
+					indexed to rgb -to gray-
 				else.
 					is gray
 
@@ -141,13 +146,16 @@ class img:
 
 		#end of constructor
 	#general for convertion
-	def get_top_scale(self):
-		if self.channels_type == "int":
+
+	@staticmethod
+	def get_top_scale(channels_type):
+		if channels_type == "int":
 			return 255
-		elif self.channels_type == "float":
+		elif channels_type == "float":
 			return 1
 		return 0
-
+	
+	@staticmethod
 	def get_np_type(channels_type):
 		if channels_type == "int":
 			return np.int32
@@ -160,7 +168,8 @@ class img:
 	#converters for gray
 
 	#gray to gray - alpha, gray to  rgb, gray to rgba, gray to bgr gray to binary, gray to indexed
-	def gray_to_gray_alpha(self, img_data): #test it
+	@staticmethod
+	def gray_to_gray_alpha(img_data): #test it
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 2), dtype = get_np_type())
 
@@ -169,7 +178,8 @@ class img:
 
 		return new_img_data
 
-	def gray_to_rgb(self, img_data): # test it
+	@staticmethod
+	def gray_to_rgb(img_data): # test it
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 3), dtype = get_np_type())
 
@@ -179,7 +189,8 @@ class img:
 
 		return new_img_data
 
-	def gray_to_rgba(self, img_data): #test it
+	@staticmethod
+	def gray_to_rgba(img_data): #test it
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 4), dtype = get_np_type())
 
@@ -188,14 +199,17 @@ class img:
 		new_img_data[:,:,2] = img_data
 		new_img_data[:,:,3] = np.full(img_data.shape, get_top_scale(), dtype = get_np_type())
 
-	def gray_to_brg(self, img_data):
+	@staticmethod
+	def gray_to_brg(img_data):
 		return gray_to_rgb(img_data) #this is because is indiferent
 
-	def gray_to_binary(self, img_data, min_value_to_white):
+	@staticmethod
+	def gray_to_binary(img_data, min_value_to_white):
 		#TODO - search the way for doing it
 		new_img_data = np.zeros((img_data.shape))
-
-	def gray_to_indexed(self, img_data, gray_values_to_index):
+	
+	@staticmethod
+	def gray_to_indexed(img_data, gray_values_to_index):
 		#TODO - search the way for doing it
 		pass
 		
