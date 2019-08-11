@@ -77,12 +77,49 @@ def img_module_initilizer_test():
 	#TODO: make Indexed INFERATION test.
 
 def img_misselaneus_fuctions_test():
+	print('=====IMG MISSLANEUS FUCTIONS=====')
+
+	print('---get_top_scale fuction tests')
+	int_case = img.img.get_top_scale('int')
+	assert int_case == 255, "should be 255"
+	print('int case: SUCCESS')
+
+	float_case = img.img.get_top_scale('float')
+	assert float_case == 1, "should be 1"
+	print('float case: SUCCESS')
+
+	no_exist_case = img.img.get_top_scale('None')
+	assert no_exist_case == 0, "should be 0"
+	print('no exist case: SUCCESS')
+
+	print('---get_np_type fuction tests')
+
+	int_case = img.img.get_np_type('int')
+	assert int_case == np.int32, 'should be np.int32'
+	print('int case: SUCCESS')
+
+	float_case = img.img.get_np_type('float')
+	assert float_case == np.float64, 'should be np.float64'
+	print('float case: SUCCESS')
+
+	bool_case = img.img.get_np_type('bool')
+	assert bool_case == np.bool, 'should be np.bool'
+	print('bool case: SUCCESS')
+
+	no_exist_case = img.img.get_np_type('None')
+	assert no_exist_case is None, 'should be None'
+	print('no exist case: SUCCESS')
+
+
+def np_convertion_functions_test():
 	pass
+
 
 #execute test for img module
 def img_module_testing():
 	#initialation.
 	img_module_initilizer_test()
+	img_misselaneus_fuctions_test()
 
 
 #test all parts of the program
