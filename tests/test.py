@@ -88,6 +88,14 @@ def img_misselaneus_fuctions_test():
 	assert float_case == 1, "should be 1"
 	print('float case: SUCCESS')
 
+	int_case_np = img.img.get_top_scale(np.int32)
+	assert int_case_np == 255, "should be 255"
+	print('int case np: SUCCESS')
+
+	float_case_np = img.img.get_top_scale(np.float64)
+	assert float_case_np == 1, "should be 1"
+	print('float case np: SUCCESS')
+
 	no_exist_case = img.img.get_top_scale('None')
 	assert no_exist_case == 0, "should be 0"
 	print('no exist case: SUCCESS')
@@ -112,7 +120,26 @@ def img_misselaneus_fuctions_test():
 
 
 def np_convertion_functions_test():
-	pass
+
+	print('======CONVERTION FUCTION TESTS========')
+	print('---from gray-scale convertions')
+	#gray np images for testing.
+	
+	gray_img_float = np.random.rand(100,100)
+	gray_img_int = (gray_img_float*255)
+
+	#gray-to-gray-alpha
+	new_img = img.img.gray_to_gray_alpha(gray_img_int)
+
+	if  len(new_img.shape) > 2:
+		assert new_img.shape[2] == 2, 'should be 2 the channels'
+	else:
+		assert True, 'not had more than 1 channel'
+	print('gray-scale to gray-scale-alpha: SUCCESS')
+
+
+
+
 
 
 #execute test for img module
@@ -120,6 +147,7 @@ def img_module_testing():
 	#initialation.
 	img_module_initilizer_test()
 	img_misselaneus_fuctions_test()
+	np_convertion_functions_test()
 
 
 #test all parts of the program

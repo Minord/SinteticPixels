@@ -148,9 +148,9 @@ class img:
 	#misselaneus fuctions
 	@staticmethod
 	def get_top_scale(channels_type):
-		if channels_type == "int":
+		if channels_type == "int" or channels_type == np.int32:
 			return 255
-		elif channels_type == "float":
+		elif channels_type == "float" or channels_type == np.float64:
 			return 1
 		return 0
 	
@@ -168,12 +168,12 @@ class img:
 
 	#gray to gray - alpha, gray to  rgb, gray to rgba, gray to bgr gray to binary, gray to indexed
 	@staticmethod
-	def gray_to_gray_alpha(img_data, channels_type): #test it
+	def gray_to_gray_alpha(img_data): #test it
 		width, heigth = img_data.shape
-		new_img_data = np.zeros((heigth, width, 2), dtype = get_np_type(channels_type))
+		new_img_data = np.zeros((heigth, width, 2), dtype = img_data.dtype)
 
-		new_img_data[:,:,0] = img_data
-		new_img_data[:,:,1] = np.full(img_data.shape, get_top_scale(channels_type), dtype = get_np_type(channels_type))
+		new_img_data[:,:,0] = img_data					###this is a problem###
+		new_img_data[:,:,1] = np.full(img_data.shape, img.get_top_scale(img_data.dtype), dtype = img_data.dtype)
 
 		return new_img_data
 
