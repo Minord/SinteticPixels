@@ -1,6 +1,7 @@
 
 from SinteticPixels import img
 import numpy as np
+import pdb
 
 #test for img module
 def img_module_initilizer_test():
@@ -118,28 +119,95 @@ def img_misselaneus_fuctions_test():
 	assert no_exist_case is None, 'should be None'
 	print('no exist case: SUCCESS')
 
+def img_tester(img, shape_size, channels, nd_type, case_name):
+	if  len(img.shape) > shape_size:
+		assert img.shape[2] == channels, 'should be {} the channels'.format(channels)
+	else:
+		assert True, 'not had more than 1 channel'
+	assert img.dtype == nd_type, 'should be {} ndarray.dtype'.format(nd_type)
+
+	print("{} case: SUCCESS".format(case_name))
+
+def	img_tester_1_channel(img, nd_type, case_name):
+	assert img.dtype == nd_type, 'should be {} ndarray.dtype'.format(nd_type)
+	print("{} case: SUCCESS".format(case_name))
 
 def np_convertion_functions_test():
 
 	print('======CONVERTION FUCTION TESTS========')
 	print('---from gray-scale convertions')
 	#gray np images for testing.
-	
-	gray_img_float = np.random.rand(100,100)
-	gray_img_int = (gray_img_float*255)
 
-	#gray-to-gray-alpha
+	gray_img_float = np.random.rand(100,100)
+	gray_img_int = (gray_img_float*255).astype(int)
+
+	#gray-to-gray-alpha int
 	new_img = img.img.gray_to_gray_alpha(gray_img_int)
 
 	if  len(new_img.shape) > 2:
 		assert new_img.shape[2] == 2, 'should be 2 the channels'
 	else:
 		assert True, 'not had more than 1 channel'
-	print('gray-scale to gray-scale-alpha: SUCCESS')
+	assert new_img.dtype == np.int32, 'should be int32 ndarray.dtype'
+	print('gray-scale to gray-scale-alpha int: SUCCESS')
 
+	#gray-to-gray-alpha float
+	new_img = img.img.gray_to_gray_alpha(gray_img_float)
 
+	if  len(new_img.shape) > 2:
+		assert new_img.shape[2] == 2, 'should be 2 the channels'
+	else:
+		assert True, 'not had more than 1 channel'
+	assert new_img.dtype == np.float64, 'should be float64 ndarray.dtype'
+	print('gray-scale to gray-scale-alpha float: SUCCESS')
 
+	#gray_to_rgb int
+	new_img = img.img.gray_to_rgb(gray_img_int)
 
+	if  len(new_img.shape) > 2:
+		assert new_img.shape[2] == 3, 'should be 3 the channels'
+	else:
+		assert True, 'not had more than 1 channel'
+	assert new_img.dtype == np.int32, 'should be int32 ndarray.dtype'
+
+	#gray_to_rgb float
+	new_img = img.img.gray_to_rgb(gray_img_float)
+
+	if  len(new_img.shape) > 2:
+		assert new_img.shape[2] == 3, 'should be 3 the channels'
+	else:
+		assert True, 'not had more than 1 channel'
+	assert new_img.dtype == np.float64, 'should be float64 ndarray.dtype'
+
+	#gray_to_rgba int
+	new_img = img.img.gray_to_rgba(gray_img_int)
+	img_tester(new_img, 2, 4, np.int32, "gray_to_rgba int")
+	#gray_to_rgba float
+	new_img = img.img.gray_to_rgba(gray_img_float)
+	img_tester(new_img, 2, 4, np.float64, "gray_to_rgba float")
+
+	#gray_to_brg int
+	new_img = img.img.gray_to_bgr(gray_img_int)
+	img_tester(new_img, 2, 3, np.int32, 'gray_to_brg int')
+	#gray_to_brg float
+	new_img = img.img.gray_to_bgr(gray_img_float)
+	img_tester(new_img, 2, 3, np.float64, 'gray_to_brg float')
+
+	#gray_to_binary int
+	new_img = img.img.gray_to_binary(gray_img_int, 0.5)
+	img_tester_1_channel(new_img, np.bool, 'gray_to_binary int')
+
+	#gray_to_binary float
+	new_img = img.img.gray_to_binary(gray_img_int, 0.5)
+	img_tester_1_channel(new_img, np.bool, 'gray_to_binary float')
+
+	#gray_to_indexed int
+	new_img = img.img.gray_to_indexed(gray_img_int, [0.2, 0.3, 0.6])
+	img_tester_1_channel(new_img, np.int32, 'gray_to_indexed int')
+
+	#gray_to_indexed float
+	new_img = img.img.gray_to_indexed(gray_img_int, [0.2, 0.3, 0.6])
+	img_tester_1_channel(new_img, np.int32, 'gray_to_indexed float')
 
 
 #execute test for img module

@@ -168,19 +168,19 @@ class img:
 
 	#gray to gray - alpha, gray to  rgb, gray to rgba, gray to bgr gray to binary, gray to indexed
 	@staticmethod
-	def gray_to_gray_alpha(img_data): #test it
+	def gray_to_gray_alpha(img_data):
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 2), dtype = img_data.dtype)
 
-		new_img_data[:,:,0] = img_data					###this is a problem###
+		new_img_data[:,:,0] = img_data	
 		new_img_data[:,:,1] = np.full(img_data.shape, img.get_top_scale(img_data.dtype), dtype = img_data.dtype)
 
 		return new_img_data
 
 	@staticmethod
-	def gray_to_rgb(img_data, channels_type): # test it
+	def gray_to_rgb(img_data): # test it
 		width, heigth = img_data.shape
-		new_img_data = np.zeros((heigth, width, 3), dtype = get_np_type(channels_type))
+		new_img_data = np.zeros((heigth, width, 3), dtype = img_data.dtype)
 
 		new_img_data[:,:,0] = img_data
 		new_img_data[:,:,1] = img_data
@@ -189,32 +189,73 @@ class img:
 		return new_img_data
 
 	@staticmethod
-	def gray_to_rgba(img_data, channels_type): #test it
+	def gray_to_rgba(img_data): #test it
 		width, heigth = img_data.shape
-		new_img_data = np.zeros((heigth, width, 4), dtype = get_np_type(channels_type))
+		new_img_data = np.zeros((heigth, width, 4), dtype = img_data.dtype)
 
 		new_img_data[:,:,0] = img_data
 		new_img_data[:,:,1] = img_data
 		new_img_data[:,:,2] = img_data
-		new_img_data[:,:,3] = np.full(img_data.shape, get_top_scale(channels_type), dtype = get_np_type(channels_type))
+		new_img_data[:,:,3] = np.full(img_data.shape, img.get_top_scale(img_data.dtype), dtype = img_data.dtype)
+
+		return new_img_data
 
 	@staticmethod
-	def gray_to_brg(img_data, channels_type):
-		return gray_to_rgb(img_data, channels_type) #this is because is indiferent
+	def gray_to_bgr(img_data): #test it
+		return img.gray_to_rgb(img_data) #this is because is indiferent
 
 	@staticmethod
-	def gray_to_binary(img_data, min_value_to_white, channels_type):
-		#TODO - search the way for doing it
-		new_img_data = np.zeros((img_data.shape))
-	
-	@staticmethod
-	def gray_to_indexed(img_data, gray_values_to_index, channels_type):
-		#TODO - search the way for doing it
-		pass
+	def gray_to_binary(img_data, min_value_to_white): #test it
 		
+		new_img = img_data >= (min_value_to_white * img.get_top_scale(img_data.dtype))
+
+		return new_img
+		
+	
+	@staticmethod				  
+	def gray_to_indexed(img_data, cut_values): #test it
+		img_levels = []
+
+		top = img.get_top_scale(img_data.dtype)
+
+		#generate a list of binariy imagenes for caculate the levels 
+		for val in cut_values:
+			img_levels.append(img_data <= (val * top))
+		img_levels.append(img_data <= 1)
+
+		#pass binary to int
+		for level in img_levels:
+			level = level.astype(img.get_np_type('int'))
+
+		final_img = np.zeros(img_data.shape , dtype = img.get_np_type('int'))
+
+		#sum all layer for get the final image
+		for level in img_levels:
+			final_img += level
+
+		return final_img
+	
 	#converters for gray-alpha
 
 	#gray alpha to gray, gray alpha to rgb, gray alpha to rgba, gray alpha to bgr, gray alpha to indexed
+	@staticmethod
+	def gray_alpha_to_gray():
+		pass
+	@staticmethod
+	def gray_alpha_to_rgb():
+		pass
+	@staticmethod
+	def gray_alpha_to_rgba():
+		pass
+	@staticmethod
+	def gray_alpha_bgr():
+		pass
+	@staticmethod
+	def gray_alpha_binary():
+		pass
+	@staticmethod
+	def gray_alpha_indexed():
+		pass
 
 	#converters for rgb
 
@@ -235,14 +276,3 @@ class img:
 	#converters for indexed
 
 	#indexed to gray, indexed to gray alpha, indexed to rgb, indexed to rgba, indexed to bgr, indexed to binary
-
-
-#i had to analizies how to make the handle of the image data format initalization.
-#what up wee whant to make this for example. is 255 - int 
-
-#prodria generalizar segun el caso pues pues en 5 de los 7 casos aplicaria esto
-#unicamente seria el cambio de canales.
-#otro punto es observer que para dejar 
-
-#parece que si elaboro esta clase de esta forma va a tomar un 
-#trabajar gigantesco de semanas XD
