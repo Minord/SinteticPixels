@@ -1,5 +1,6 @@
 import numpy as np
 import pdb
+import cv2
 
 class img:
 
@@ -178,7 +179,7 @@ class img:
 		return new_img_data
 
 	@staticmethod
-	def gray_to_rgb(img_data): # test it
+	def gray_to_rgb(img_data):
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 3), dtype = img_data.dtype)
 
@@ -189,7 +190,7 @@ class img:
 		return new_img_data
 
 	@staticmethod
-	def gray_to_rgba(img_data): #test it
+	def gray_to_rgba(img_data):
 		width, heigth = img_data.shape
 		new_img_data = np.zeros((heigth, width, 4), dtype = img_data.dtype)
 
@@ -201,27 +202,25 @@ class img:
 		return new_img_data
 
 	@staticmethod
-	def gray_to_bgr(img_data): #test it
+	def gray_to_bgr(img_data):
 		return img.gray_to_rgb(img_data) #this is because is indiferent
 
 	@staticmethod
-	def gray_to_binary(img_data, min_value_to_white): #test it
-		
+	def gray_to_binary(img_data, min_value_to_white):
 		new_img = img_data >= (min_value_to_white * img.get_top_scale(img_data.dtype))
-
 		return new_img
 		
 	
 	@staticmethod				  
-	def gray_to_indexed(img_data, cut_values): #test it
+	def gray_to_indexed(img_data, cut_values):
 		img_levels = []
 
 		top = img.get_top_scale(img_data.dtype)
 
 		#generate a list of binariy imagenes for caculate the levels 
 		for val in cut_values:
-			img_levels.append(img_data <= (val * top))
-		img_levels.append(img_data <= 1)
+			img_levels.append(img_data >= (val * top))
+		img_levels.append(img_data > 0)
 
 		#pass binary to int
 		for level in img_levels:
@@ -239,40 +238,244 @@ class img:
 
 	#gray alpha to gray, gray alpha to rgb, gray alpha to rgba, gray alpha to bgr, gray alpha to indexed
 	@staticmethod
-	def gray_alpha_to_gray():
-		pass
+	def gray_alpha_to_gray(img_data): #test it
+		heigth, width, _ = img_data.shape
+		new_img = np.zeros((heigth, width), dtype = img_data.dtype)
+		new_img = img_data[:,:,1]
+		return new_img
+
 	@staticmethod
-	def gray_alpha_to_rgb():
-		pass
+	def gray_alpha_to_rgb(img_data): #test it
+		new_img = img.gray_alpha_to_gray(img_data)
+		new_img = img.gray_to_rgb(new_img)
+		return new_img
+
 	@staticmethod
-	def gray_alpha_to_rgba():
-		pass
+	def gray_alpha_to_rgba(img_data): #test it
+		new_img = img.gray_alpha_to_gray(img_data)
+		new_img = img.gray_to_rgba(new_img)
+		return new_img
+
 	@staticmethod
-	def gray_alpha_bgr():
-		pass
+	def gray_alpha_to_bgr(img_data): #test it
+		new_img = img.gray_alpha_to_gray(img_data)
+		new_img = img.gray_to_bgr(new_img)
+		return new_img
+
 	@staticmethod
-	def gray_alpha_binary():
-		pass
+	def gray_alpha_to_binary(img_data, min_value_to_white): #test it
+		new_img = img.gray_alpha_to_gray(img_data)
+		new_img = img.gray_to_binary(new_img, min_value_to_white)
+		return new_img
+
 	@staticmethod
-	def gray_alpha_indexed():
-		pass
+	def gray_alpha_indexed(img_data, cut_values): #test it
+		new_img = img.gray_alpha_to_gray(img_data)
+		new_img = img.gray_to_indexed(new_img, cut_values)
+		return new_img
 
 	#converters for rgb
 
 	#rgb to gray, rgb to gray alpha, rgb to rgba, rgb to bgr, rgb to binary, rgb to indexed 
+	@staticmethod
+	def rgb_to_gray(img_data): #test it
+		a = 0.2989
+		b = 0.5870
+		c = 0.1140
+		new_img = img_data[:,:,0] * a + img_data[:,:,1] * b + img_data[:,:,2] * c
+		
+		return new_img
+
+	@staticmethod
+	def rgb_to_gray_alpha(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		
+		new_img = np.zeros((heigth, width, 2), dtype = img_data.dtype)
+
+		new_img[:,:,0] = img.rgb_to_gray_alpha(img_data)
+		new_img[:,:,1] = np.full((heigth, width), img.get_top_scale(img_data.dtype), dtype = img_data.dtype)
+
+		return new_img
+
+	@staticmethod
+	def rgb_to_rgba(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		
+		new_img = np.zeros((heigth, width, 4), dtype = img_data.dtype)
+
+		new_img[:,:,0:2] = img_data
+		new_img[:,:,3] = np.full((heigth, width), img.get_top_scale(img_data.dtype), dtype = img_data.dtype)
+
+		return new_img
+
+	@staticmethod
+	def rgb_to_bgr(img_data):  #test it
+		new_img = np.zeros(img_data.shape,  dtype = img_data.dtype)
+
+		new_img[:,:,0] = img_data[:,:,2]
+		new_img[:,:,1] = img_data[:,:,1]
+		new_img[:,:,2] = img_data[:,:,0]
+		
+		return new_img
+
+	@staticmethod
+	def rgb_to_binary(img_data, rgb_value):  #test it
+		heigth, width, _ = img_data.shape
+
+		new_img = np.zeros((heigth, width),  dtype = img.get_np_type('bool'))
+
+		img_data = img_data.astype(np.int32)
+
+		new_img = img_data[:,:,0] == rgb_value[0] / divisor_control
+		new_img = np.logical_and(new_img, img_data[:,:,1] == rgb_value[1])
+		new_img = np.logical_and(new_img, img_data[:,:,2] == rgb_value[2])
+
+		return new_img
+
+	@staticmethod
+	def rgb_to_indexed(img_data, color_index):  #test it
+		heigth, width, _ = img_data.shape
+
+		new_img = np.zeros((heigth, width),  dtype = img.get_np_type('int'))
+
+		img_data = img_data.astype(np.int32)
+		isColor = lambda cond, index: index if cond else 0
+
+		for x, y in zip(width, heigth):
+			for i, color in enumerate(color_index):
+			r = color[0] 
+			g = color[1]
+			b = color[2]
+			pixel_color = img_data[y,x,:]
+			color_concide = pixel_color[0] == r and  pixel_color[1] == g and  pixel_color[2] == b
+			new_img[y, x] = isColor(color_concide, i+1)
+
+		return new_img
 
 	#converters for rgba
 
 	#rgba to gray, rgba to gray alpha, rgba to rgb, rgba to bgr, rgba to binary, rgb to indexed
 
-	#converters for bgr
+	@staticmethod
+	def rgba_to_gray(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = rgb_to_gray(img_data[:,:,0:2])
+		return new_img
 
+	@staticmethod
+	def rgba_to_gray_alpha(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = rgb_to_gray_alpha(img_data[:,:,0:2])
+		return new_img
+
+	@staticmethod
+	def rgba_to_rgb(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = img_data[:,:,0:2]
+		return new_img
+
+	@staticmethod
+	def rgba_to_bgr(img_data):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = rgb_to_bgr(img_data[:,:,0:2])
+		return new_img
+
+	@staticmethod
+	def rgba_to_binary(img_data, rgb_value):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = rgb_to_binary(img_data[:,:,0:2], rgb_value)
+		return new_img
+
+	@staticmethod
+	def rgba_to_indexed(img_data, color_index):  #test it
+		heigth, width, _ = img_data.shape
+		new_img = rgb_to_indexed(img_data[:,:,0:2], color_index)
+		return new_img
+
+	#converters for bgr
 	#bgr to gray, bgr to gray alpha, bgr to rgb, bgr to rgba, bgr to binary, bgr to indexed
+
+	@staticmethod
+	def bgr_to_gray(img_data):  #test it
+		return rgb_to_gray(bgr_to_rgb(img_data))
+
+
+	@staticmethod
+	def bgr_to_gray_alpha(img_data):  #test it
+		return rgb_to_gray_alpha(bgr_to_rgb(img_data))
+
+	@staticmethod
+	def bgr_to_rgb(img_data):  #test it
+		new_img = np.zeros(img_data.shape, dtype = img_data.dtype)
+		new_img[:,:,0] = img_data[:,:,2]
+		new_img[:,:,1] = img_data[:,:,1]
+		new_img[:,:,2] = img_data[:,:,0]
+		return new_img
+
+	@staticmethod
+	def bgr_to_rgba(img_data):  #test it
+		return rgb_to_rgba(bgr_to_rgb(img_data))
+
+    @staticmethod
+	def bgr_to_binary(img_data, rgb_value):  #test it
+		return rgb_to_binary(bgr_to_rgb(img_data), rgb_value)
+
+	@staticmethod
+	def bgr_to_indexed(img_data, color_index):  #test it
+		return rgb_to_indexed(bgr_to_rgb(img_data), color_index)
 
 	#converters for binary
 
 	#binary to gray, binary to gray alpha, binary to rgb, binary to rgba, binary to bgr, binary, to indexed
 
+	@staticmethod
+	def binary_to_gray(img_data):  #test it
+		pass
+
+	@staticmethod
+	def binary_to_gray_alpha(img_data):  #test it
+		pass
+
+	@staticmethod
+	def binary_to_rgb(img_data):  #test it
+		pass
+
+	@staticmethod
+	def binary_to_rgba(img_data):  #test it
+		pass
+
+	@staticmethod
+	def binary_to_bgr(img_data):  #test it
+		pass
+
+	@staticmethod
+	def binary_to_indexed(img_data):  #test it
+		pass
+
 	#converters for indexed
 
 	#indexed to gray, indexed to gray alpha, indexed to rgb, indexed to rgba, indexed to bgr, indexed to binary
+
+	@staticmethod
+	def indexed_to_gray(img_data):  #test it
+		pass
+
+	@staticmethod
+	def indexed_to_gray_alpha(img_data): #test it
+		pass
+
+	@staticmethod
+	def indexed_to_rgb(img_data):  #test it
+		pass
+
+	@staticmethod
+	def indexed_to_rgba(img_data):  #test it
+		pass
+
+	@staticmethod
+	def indexed_to_bgr(img_data):  #test it
+		pass
+	
+	@staticmethod
+	def indexed_to_binary(img_data):  #test it
+		pass

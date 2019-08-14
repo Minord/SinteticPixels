@@ -2,6 +2,7 @@
 from SinteticPixels import img
 import numpy as np
 import pdb
+import unittest
 
 #test for img module
 def img_module_initilizer_test():
@@ -128,6 +129,33 @@ def img_tester(img, shape_size, channels, nd_type, case_name):
 
 	print("{} case: SUCCESS".format(case_name))
 
+##How i can do a fuction to test a img fuction.
+def img_tester(img, func_to_test, channels, nd_dtype, *arg):
+	new_img = func_to_test(img, arg)
+
+class test_image_methods(unittest.TestCase):
+	
+	def setUp(self):
+       pass
+
+    def tearDown(self):
+       pass
+
+	def test_gray_alpha_to_gray(self):
+		pass
+	
+	def test_gray_alpha_to_rgb(self):
+		pass
+
+	def test_gray_alpha_to_rgba(self):
+		pass
+
+	def test_gray_alpha_to_binary(self):
+		pass
+
+	def test_gray_alpha_to_indexed(self):
+		pass
+
 def	img_tester_1_channel(img, nd_type, case_name):
 	assert img.dtype == nd_type, 'should be {} ndarray.dtype'.format(nd_type)
 	print("{} case: SUCCESS".format(case_name))
@@ -208,6 +236,10 @@ def np_convertion_functions_test():
 	#gray_to_indexed float
 	new_img = img.img.gray_to_indexed(gray_img_int, [0.2, 0.3, 0.6])
 	img_tester_1_channel(new_img, np.int32, 'gray_to_indexed float')
+
+	print('---from gray-scale convertions')
+
+
 
 
 #execute test for img module
