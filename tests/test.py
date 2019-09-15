@@ -133,28 +133,6 @@ def img_tester(img, shape_size, channels, nd_type, case_name):
 def img_tester(img, func_to_test, channels, nd_dtype, *arg):
 	new_img = func_to_test(img, arg)
 
-class test_image_methods(unittest.TestCase):
-	
-	def setUp(self):
-       pass
-
-    def tearDown(self):
-       pass
-
-	def test_gray_alpha_to_gray(self):
-		pass
-	
-	def test_gray_alpha_to_rgb(self):
-		pass
-
-	def test_gray_alpha_to_rgba(self):
-		pass
-
-	def test_gray_alpha_to_binary(self):
-		pass
-
-	def test_gray_alpha_to_indexed(self):
-		pass
 
 def	img_tester_1_channel(img, nd_type, case_name):
 	assert img.dtype == nd_type, 'should be {} ndarray.dtype'.format(nd_type)

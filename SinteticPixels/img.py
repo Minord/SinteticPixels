@@ -430,27 +430,27 @@ class img:
 
 	@staticmethod
 	def binary_to_gray(img_data):  #test it
-		pass
+		return img_data.astype(np.int32) * 255
 
 	@staticmethod
 	def binary_to_gray_alpha(img_data):  #test it
-		pass
+		return gray_to_gray_alpha(binary_to_gray(img_data))
 
 	@staticmethod
 	def binary_to_rgb(img_data):  #test it
-		pass
+		return gray_to_rgb(binary_to_gray(img_data))
 
 	@staticmethod
 	def binary_to_rgba(img_data):  #test it
-		pass
+		return gray_to_rgba(binary_to_gray(img_data))
 
 	@staticmethod
 	def binary_to_bgr(img_data):  #test it
-		pass
+		return gray_to_bgr(binary_to_gray(img_data))
 
 	@staticmethod
 	def binary_to_indexed(img_data):  #test it
-		pass
+		#this is the most interesting
 
 	#converters for indexed
 
@@ -479,3 +479,6 @@ class img:
 	@staticmethod
 	def indexed_to_binary(img_data):  #test it
 		pass
+
+#hoow shit is true i can made a bridge img type. Fuckkkkkkk
+#480 lines to the trash

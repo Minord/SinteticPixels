@@ -1,3 +1,6 @@
 from tests import test
+from tests import test_img
 
-test.test_all()
+import unittest
+
+#test.test_all()
