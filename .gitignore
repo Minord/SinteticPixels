@@ -5,6 +5,7 @@
 *.sln.docstates
 
 .vs/
+.idea/
 
 
 #################Python Ignores###################
