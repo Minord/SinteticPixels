@@ -1,0 +1,218 @@
+
+If you are readding this text probabily is best ignore this, is a
+messing file for figure out the posible solutions for the problems in
+this module
+
+#this is the image module of the proyect the propourse of this module
+#is create classes for handle the img types. basic image operations
+
+#well i have to descrive firts is the psilosofy of this modole gona be.
+
+#give a object what can be use for representate images and their information
+
+
+#What are the general capabilities?
+
+#	GET A GENERAL OBJECT TO REPRESENT ANY IMAGE.
+
+#	CREATE A UNIVERSAL FUCTIONS FOR OPERATE OVER 
+#	IMG DATA IN ANY IMAGE TYPE WITH THE IMG TYPE LIMITS
+#	-SUM IMAGES.
+#	-MULTIPY IMAGES BY AN SCALAR.
+#	-ALL NUMPY FUCTIONS.
+#	-FOR LOOPS x, y information.
+#	define it more.
+
+#	CAN TRANSLATE ANY IMAGE TYPE TO ANOTHER EFICIENTLY
+
+#	CAN SAVE AND LOAD THE IMGS EASILY
+
+#create a type img object with the convercion protocols
+#and the rules folowing by they for some operations.
+
+
+####### new goals
+
+#give a way to registry a convertion prosses
+
+#give a way to execute  any function in program
+
+#give a way to execute any numpy fuction
+
+#prosses beetween 2 images a return tpye of course.
+
+#give a way to know exactly what kind of img i have
+
+
+
+
+
+
+#img buffer - a collections of images.
+	#all the images are the same
+
+#img object
+	#header
+	#data
+
+	#load
+	#save
+
+#basic operations
+
+
+	#updatepixels() it update a set of pixels whith defined cordinates.
+
+#  //this object represents the propierties of the image.
+#header object
+	#name
+	#color_type.
+	#has alpha channel.
+	#scales of pixels.
+	#dtype of pixels.
+	#color chanels.
+	#color space.
+
+	#int
+	#float
+	#bool
+
+	#tags.
+
+#data object
+	#size
+	#dtype
+		
+	#update pixels()
+	#execute_np_fuction()
+
+#convetion methods.
+	#convertions into img types.
+
+
+#for example this declarations if here can help mor make my code more 
+
+
+#convetion FUCTIONS
+#for each type of image is needed declare 2 functions (IMG_TYPE)_to_conv and conv_to_(IMG_TYPE)
+
+
+
+#cython and numpy can help
+#we have a buffer procol in python wtf
+
+#shape
+#ndim
+#dtype
+
+#this are convencional names 
+
+#what up if i abandone the numpy well i dont think it
+#but for practice i have to try to create this posibility
+
+
+#well maybe is a good plan do someting like cython code for 
+the main loops well now i have a best focus for improve the 
+performace of the this code.
+
+Convolution.
+Brush.
+PixperPix
+fuction with cord information.
+
+for example the convolution
+
+#kernel.
+#matrix.
+
+	for float
+	for int
+
+-- another folder
+	--fastfuctions
+		
+		#this fucntions works with 3 dim MxNx(1-n)
+		#formal conv
+		-conv()
+
+		#operator with
+		-in_pixels_func()
+
+		-fuction_for_ponderate_pixels()
+		-fuction_for_modified_pixels()
+
+		#for int
+		#for float
+		#for boolean
+
+-- manage this fuctions
+
+	hanle_more_general_fuction
+
+	get_cords(func):
+	set_cords(func):
+
+#the firts step is do that for numpy based numpy
+#and test this
+#after implement the cython based loops
+
+some fuctions what are so complex like the folowwing gradient algorimth
+and i dont know if i can halde this prosses with that
+
+bueno entonces que deberia de hacer con las fucciones si es cierto que he de reunir
+las condiciones en las que voy a ordenar las operaciones que es practicamente
+lo que estado haciendo pero lo que quiero es poder encapsular el tema de los
+prosesos y ademas el tema de los tipos y los array y las operaciones de todo esta 
+shiit
+
+entonces el problema que la complejidad de resolver este problema por el hecho
+de cuantas variables esto implica esto genera que tenga que pensar en solucciones
+que no son las mejores pero bueno supongamos que quiero enfocarme en diseñar la
+parte de las operaciones como podria hacer esto Mmmmmm
+
+Primero esto tiene que ir enfocado un poco a unas fucciones de cython y ademas
+tendre que tener codigo complilado en este sistema hee esto podria ser un problema
+para mi problema hee. bueno entonces lo que quiero al final es otra cuestion
+por ejemplo tengo definido en el area de operacciones que simplemente se aran
+e implementaran con numpy arrays.
+
+Bueno entonces haora que tendria que hacer primero seria un poco nesesario 
+implementar estas fucciones en python puro y luego exportalas a otros formatos e
+entonces supongamos que tenemos un diccionario de funciones o mejor dicho las
+las funciones generales bueno entonces como podria adaptar estas fucciones a otros
+si entonces lo bueno seria definir los tipos con los que trabajaran ls operaciones
+
+
+estos tipos son:
+
+#estos 3 son los unicos tipos que soporta las operaciones.
+
+int
+float
+bool
+
+#bueno entonces tengo estos tipos de datos que soportare desde mis fucciones de 
+operaciones.
+
+#luego como hago para estruccturar si esto se hara con funcciones de cython
+o de pyhon preferiblemente esto tiene que ser con una sola parabra.
+	-Este es un problema a resolver.
+
+#luego como hago para que las fucciones de distintos tipos se separen.
+en realidad no importa lo unico que importa realmente es que se declaren como
+tales como int float o boolean.
+
+#que tipo de operaciones implementare de las fucciones bassicas tambien es cierto
+que he de definir varios prosesos que se puedan hacer para crear estas funciones.
+
+#la pregunta como puedo crear estos wrappers para python si perder eficiencia
+por ejemplo en 
+
+bueno entonces hare simplemente tratar de recrear estas fucciones en cython
+pero pararece que va a ser un poco complicado por el echo de que hay que 
+complilar c y cosas que tienen que ver con el sistema operativo diria.
+
+Que sentido tiene crear clases para los metodos de cada tipo de numpy array
+Mmmm bueno no seria mala idea buscar estos algoritmos en librerias de terceros
+pero es que estas no dan accseso a niveles basicos de la informaccion.
+como hacer esta implementaciones heee es que esta dificil el problema
