@@ -59,23 +59,24 @@ def expand_img(ndarray ,left, right, up, down):
 #TODO: Check spelling
 #TODO: Check and test some extreme cases like 1 by 1 kernel or a rare kernel
 #and to check if the logic is correct. but by now is seems like it work
-def convolution2D_float(ndarray, kernel, kernel_pivot):
+#TODO: make a bechmark
+def convolution2D(ndarray, kernel, kernel_pivot):
 	"""
 	make a convolution process with an kernel and we can set 
 	any origin to that kernel and make convolutions with odd kernels
 
 	Parameters
 	-----------
-		ndarray - ndarray numpy - the original image in which we will make the convolution
+	ndarray - ndarray numpy - the original image in which we will make the convolution
 
-		kernel - ndarray numpy - the kernel we going to use
+	kernel - ndarray numpy - the kernel we going to use
 
-		kernel pivot - int tuple - indexes of origin kernel like (x, y) (1, 5) etc with
-								   values inside of kernel bounds
+	kernel pivot - int tuple - indexes of origin kernel like (x, y) (1, 5) etc with
+	values inside of kernel bounds
 
 	Return
 	--------
-		new_ndarray - ndarray numpy - the final result with applied convolution process.
+	new_ndarray - ndarray numpy - the final result with applied convolution process.
 	"""
 	#validation of arrays types
 	assert ndarray.dtype == np.float, 'Invalid dtype of ndarray should be float'
@@ -103,7 +104,6 @@ def convolution2D_float(ndarray, kernel, kernel_pivot):
 	y_min, y_max = (y_pivot), ((height_kernel-1) - y_pivot)
 
 	#change the bounds of my array with concatenate fuctions
-
 	left, right, up, down = x_min, x_max, y_min, y_max
 	ndarray = expand_img(ndarray, left, right, up, down)
 
@@ -122,71 +122,144 @@ def convolution2D_float(ndarray, kernel, kernel_pivot):
 
 	return result_ndarray
 
+def point_into_bound(bounds, point, array_name):
+	"""
+	Check if the point values are not outside of bounds value and raise the assets
 
-#TODO: implements this methods
-def stamp2D_float(self, ndarray, brush):
-		pass
+	Parameters
+	----------
+	bounds - int tuple - the shape of a array with the format of (heigth, width)
 
+	point - int tuple - the point to check
 
+	array_name - string - the name for make more despriptive the assets
 
+	"""
+	height, width = bounds #get ndarray shape
+	x, y = point #get the components of stamp_point
+	#validate in x
+	assert (x >= 0 and x < width), "out of {} bounds in x axis in stamp_point".format(array_name)
+	#validate in y
+	assert (y >= 0 and y < height), "out of {} bounds in y axis in stamp_point".format(array_name)
 
-#this is for the operations for float ndarrays
-class FloatOperations():
-	def __init__(self):
-		pass
+def retrict_range_index(value, range):
+	"""
+	it cut off in the border of range if the value are outside of range
 
-	#operations with 1 ndarrays
+	Parameters
+	-----------
+	value - int - is the value that we going to limit if it is out of range
+
+	range - int - es el rango que limita el valor con el formato (min, max)
+	donde max no está en el rango por razones de índice
+	"""
+	min, max = range
+	if value < min:
+		return min
+	elif value >= max:
+		return max
+	return value
+
+def valid_dtype_assertion(expected_dtypes, actual_dtype, name):
+	"""
+	Check if the actual dtype is in expected_dtypes tuple
+
+	Parameters
+	-----------
+	expected_dtypes - dtypes tuple - this are the set of valid types.
+	actual_dtype - dtype - the actual dtype for check
+	name - string - the name for the assertion error message
+	"""
+	assert (actual_dtype in expected_dtypes), "Invalid dtype of {} should be {}".format(name, str(expected_dtypes))
 	
+def valid_ndim_assertion(expected_dimentions, actual_dimention, name):
+	"""
+	Check if the actual ndim is in expected ndim tuple
 
-	#operations with 2 ndarrays
-	
-	def sum(self, ndarray1, ndarray2):
-		pass
-	
-	def diference(self, ndarray1, ndarray2):
-		pass
+	Parameters
+	----------
+		expected_dimentions - int tuple - this are the set of valid ndim.
+		actual_dimention - int - the actual ndim for check
+		name - string - the name for the assertion error message
+	"""
+	assert (actual_dimention in expected_dimentions), "Invalid ndim of {} should be {}".format(name, str(expected_dimentions))
 
-	def multiply(self, ndarray1, ndarray2):
-		pass
+def validate_ndarray(ndarray, expected_dtypes, expected_dimentions, name):
+	"""
+	this is for check a ndarray has valid of dtype and ndim.
 
-	def division(self, ndarray1, ndarray2):
-		pass
+	Parematers
+	----------
+	ndarray - ndarray numpy - the ndarray form which the properties will be obtained
+	expected_dtypes - dtypes tuple - this are the set of valid types.
+	expected_dimentions - int tuple - this are the set of valid ndim.
+	name - string - the name for the assertion error message
+	"""
+	valid_dtype_assertion(expected_dtypes, ndarray.dtype, name)
+	valid_ndim_assertion(expected_dimentions, ndarray.ndim, name)
 
+def validate_common(ndarray, name):
+	"""
+	check if ndarray has 2 dimensions only and if it has float or int dtypes
 
-#this is for the operations for int ndarrays
-class IntOperations():
-	def __init__(self):
-		pass
+	Parameters
+	----------- 
+	ndarray - ndarray numpy - the ndarray form which the properties will be obtained
+	name - string - the name for the assertion error message
+	"""
+	validate_ndarray(ndarray,(np.float, np.int), (2,) , name)
 
-	#operations with 1 ndarrays
-	def convolution(self, kernel):
-		pass
+def stamp2D(ndarray, brush, brush_pivot, stamp_point, neutral_value = 0):
+	"""
+	Stamp pixels according to a brush, you can choose the brush pivot
+	and stamp point
 
-	def stamp(self, brush):
-		pass
+	Parameters
+	-----------
+	ndarray - ndarray numpy - original image to stamp
+	brush - ndarray numpy - brush to stamp
+	brush_pivot - int tuple - brush origin it has to be between brush bounds in (x, y) format
+	stamp_point - int tuple - stamp point it has to be between ndarray img bounds in (x, y) format
+	neutral_value - num - a value in brush what is go to be ignore in the stamp
+	"""
+	#check if ndarray inputs has valid propierties
+	validate_common(ndarray, 'ndarray')
+	validate_common(brush, 'brush')
 
-	#operations with 2 ndarrays
-	# ...
+	#check if we have a valid stamp point
+	point_into_bound(ndarray.shape, stamp_point, 'ndarray')
 
+	#check if the brush pivot point is valid
+	point_into_bound(brush.shape, brush_pivot, 'brush')
 
-#this is for the general operations with boolean ndarray
-class BoolOperations():
-	def __init__(self):
-		pass
+	#get the components of the shapes of ndarray and brush
+	height, width = ndarray.shape
+	brush_height, brush_width = brush.shape
 
-	#operations with 1 ndarrays
-	def convolution(self, ndarray, kernel):
-		pass
+	#get the components of stamp and brush points
+	x_stamp, y_stamp = stamp_point
+	x_pivot, y_pivot = brush_pivot
 
-	def stamp(self, ndarray, brush):
-		pass
+	#get the bounds for iterate over them
+	x_min, x_max = (x_stamp - x_pivot), (x_stamp + brush_width - x_pivot)
+	y_min, y_max = (y_stamp - y_pivot), (y_stamp + brush_height - y_pivot)
 
-	#operations with 2 ndarrays
-	def union(self, ndarray1, ndarray2):
-		pass
+	#validate the loop indexes
+	x_min = retrict_range_index(x_min, (0, width))
+	x_max = retrict_range_index(x_max, (0, width))
+	y_min = retrict_range_index(y_min, (0, height))
+	y_max = retrict_range_index(y_max, (0, height))
 
-	def interception(self, ndarray1, ndarray2):
-		pass
+	#create a copy of the original ndarray
+	new_ndarray = np.array(ndarray)
 
-	def diference(self, ndarray1, ndarray2):
-		pass
+	for x in range(x_min, x_max):
+		for y in range(y_min, y_max):
+			#get the index in brush arrray
+			x_brush = x - x_stamp + x_pivot
+			y_brush = y - y_stamp + y_pivot
+
+			#check if the value is null
+			if brush[y_brush, x_brush] != neutral_value:
+				new_ndarray[y, x] = brush[y_brush, x_brush]
+	return new_ndarray

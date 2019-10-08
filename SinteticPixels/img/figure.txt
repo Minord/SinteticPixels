@@ -167,7 +167,7 @@ shiit
 
 entonces el problema que la complejidad de resolver este problema por el hecho
 de cuantas variables esto implica esto genera que tenga que pensar en solucciones
-que no son las mejores pero bueno supongamos que quiero enfocarme en diseñar la
+que no son las mejores pero bueno supongamos que quiero enfocarme en diseï¿½ar la
 parte de las operaciones como podria hacer esto Mmmmmm
 
 Primero esto tiene que ir enfocado un poco a unas fucciones de cython y ademas
@@ -216,3 +216,111 @@ Que sentido tiene crear clases para los metodos de cada tipo de numpy array
 Mmmm bueno no seria mala idea buscar estos algoritmos en librerias de terceros
 pero es que estas no dan accseso a niveles basicos de la informaccion.
 como hacer esta implementaciones heee es que esta dificil el problema
+
+
+
+
+
+#weno weno weno y haora como hago para tratar de hacer una fuccion eficiento
+para estampar pratrones pues claro tengo 
+
+Entradas
+
+imagen a estampar
+
+Brush
+
+Pivot Brush 
+
+stamp point.
+
+primero esto es un estampado podria decir que simplemente se remplazaran valores
+donde se indique donde es que se van a remplazar los valores y ademas porque valoeres
+se van a remplazar por ejemploo podria poner la regla de que si el valor en la matrix stampar
+es 0 entonce no modifique el pixel aunque este tenga presisamente esto Mmmm como podria hacer esto
+aplicar un mask a el estampado MMmmm curioso
+
+Pero no seria mejor a partir del estampado generar algun diccionario con los indices que se modificaran
+y los valores que se asignaran no lo veo como una mala idea pero que pasaria si quisiera utilizar esta funcionesde
+
+demaciadas veces eso no seria lento pues tendria que generar bucles for no
+
+[3,1,2],[3,5,3],[4,3,2]
+
+O a  lo mejor en lugar de un diccionario de numpy hacer lo con un array de numpy con [1,3] dimenciones
+con el que tendra unas seldas hee pues podria fuccionar muy muy bien
+
+#THIS IS A USELESS FUCTION BY NOW 
+def calculate_pixels_indexes(brush, brush_pivot, stamp_point, img_bounds):
+	"""
+	By given a brush and it pivot or origin. calculate in fuction of the stamp point tuple and also contemplating
+	the bounds of image to stamp. it calculate a numpy array with a shape of (n, 3) where n is the num
+	of pixels. indexing in n return a 3-vector and it values represent [y, x, value] y and x represent
+	the pixel to modify and the value
+	is the new pixel value.
+
+	Note: if a original brush pixel is 0 it pixels is not going to be indexed in pixels list.
+	"""
+	brush_pixels_amount = brush.size #get the number of pixels of brush
+
+	brush_height, brush_width = brush.shape
+
+	pixels_list = np.zeros((brush_pixels_amount, 3))
+
+	pixels_counter = 0
+
+	for x in range(brush_width):
+		for y in range(brush_height):
+
+			#NOTE DEV: i have to check the bounds of img
+			#withd an if is a good idea Mmm i really dont know
+
+			if brush[y, x] == 0:
+				#adding new pixel information
+				pixels_list[pixels_counter, :] = np.array([y, x, brush[y, x]], dtype = float)
+				#incrementing the pixels counter
+				pixels_counter += 1
+
+	#reduce de size of pixels deleting void vectors
+	pixels_list = pixels_list[0 : pixels_counter,:]  #NOTE: maybe i have sum 1 to pixels counter Mmmm
+	
+	return pixels_list
+
+
+
+
+
+Metodos para arrays 2d con float o int
+
+	def sum(self, ndarray1, ndarray2):
+		pass
+	
+	def diference(self, ndarray1, ndarray2):
+		pass
+
+	def multiply(self, ndarray1, ndarray2):
+		pass
+
+	def division(self, ndarray1, ndarray2):
+		pass
+
+Metodos para arrays booleanos
+
+	def convolution(self, ndarray, kernel):
+		pass
+
+	def stamp(self, ndarray, brush):
+		pass
+
+	#operations with 2 ndarrays
+	def union(self, ndarray1, ndarray2):
+		pass
+
+	def interception(self, ndarray1, ndarray2):
+		pass
+
+	def diference(self, ndarray1, ndarray2):
+		pass
+
+
+
