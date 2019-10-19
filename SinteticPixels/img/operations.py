@@ -3,6 +3,7 @@ import pdb
 
 
 
+#TODO: maybe i should make what this can handle with others expand values adding , expand_value = None
 def expand_img(ndarray ,left, right, up, down):
 	"""
 	this is for expand the borders of the image with the same information
@@ -60,6 +61,7 @@ def expand_img(ndarray ,left, right, up, down):
 #TODO: Check and test some extreme cases like 1 by 1 kernel or a rare kernel
 #and to check if the logic is correct. but by now is seems like it work
 #TODO: make a bechmark
+#TODO: this method only accept float ndarray i whant accept int too
 def convolution2D(ndarray, kernel, kernel_pivot):
 	"""
 	make a convolution process with an kernel and we can set 
@@ -151,7 +153,7 @@ def retrict_range_index(value, range):
 	value - int - is the value that we going to limit if it is out of range
 
 	range - int - es el rango que limita el valor con el formato (min, max)
-	donde max no está en el rango por razones de índice
+	donde max no está en el rango por razones de índice  #FIXME: tanslate this to english
 	"""
 	min, max = range
 	if value < min:
@@ -263,3 +265,13 @@ def stamp2D(ndarray, brush, brush_pivot, stamp_point, neutral_value = 0):
 			if brush[y_brush, x_brush] != neutral_value:
 				new_ndarray[y, x] = brush[y_brush, x_brush]
 	return new_ndarray
+
+
+def replace():
+	pass
+
+def operation_coordinates():
+	pass
+
+def fusion():
+	pass

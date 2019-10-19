@@ -4,7 +4,7 @@
 
 
 def gray_to_rgb():
-    pass
+    pass 
 
 def rgb_to_gray():
     pass
